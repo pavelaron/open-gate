@@ -1,0 +1,59 @@
+body, html {
+  background-color: #ebecf0;
+  font-family: sans-serif;
+  font-size: 16px;
+  -webkit-text-size-adjust: none;
+  touch-action: manipulation;
+}
+
+div, p {
+  color: #babecc;
+  text-shadow: 1px 1px 1px white;
+}
+
+.container-buttons {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button {
+  display: block;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  box-sizing: content-box;
+  padding: 20px;
+  background-color: #ebecf0;
+  color: #61677c;
+  font-weight: bold;
+  border: 0;
+  outline: 0;
+  font-size: 16px;
+  border-radius: 100%;
+  box-shadow: -5px -5px 20px white, 5px 5px 20px #babecc;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button img {
+  fill: gray;
+}
+
+.button.car {
+  width: 160px;
+  height: 160px;
+}
+
+.button.pedestrian {
+  left: 50%;
+  margin-top: -70px;
+}
+
+.button:active {
+  box-shadow: inset 1px 1px 2px #babecc, inset -1px -1px 2px white;
+}

@@ -1,0 +1,29 @@
+{
+  "name": "open-gate",
+  "version": "1.0.0",
+  "description": "Pico W remote control for opening gates",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp",
+    "docker:build": "docker buildx build --platform linux/amd64 .",
+    "docker:images": "docker images"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pavelaron/cocopool-pico-remote.git"
+  },
+  "author": "Aron Pavel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pavelaron/cocopool-pico-remote/issues"
+  },
+  "homepage": "https://github.com/pavelaron/cocopool-pico-remote#readme",
+  "devDependencies": {
+    "fs-extra": "^11.1.1",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-uglify": "^3.0.2"
+  }
+}

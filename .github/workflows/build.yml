@@ -1,0 +1,23 @@
+name: Build uf2
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+       image: ghcr.io/pavelaron/uf2-build:1.20.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: PNPM install
+        run: pnpm install --no-frozen-lockfile
+      - name: Minify
+        run: pnpm start
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: open-gate
+          path: ${{ github.workspace }}/dist/**/*
