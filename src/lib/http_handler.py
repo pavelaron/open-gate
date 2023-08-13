@@ -21,41 +21,48 @@ types_map = {
 
 buttons = {
     'pedestrian' : Pin(6, Pin.OUT),
-    'car'        : Pin(7, Pin.OUT)
+    'car'        : Pin(7, Pin.OUT),
 }
 
 class HttpHandler:
     def __init__(self, ip, cache_filename):
         self.__ip = ip
+        self.__connection = socket.socket()
         self.__cache_filename = cache_filename
-    
+        self.__btn_timer = Timer(-1)
+
     def __open_socket(self):
         address = (self.__ip, 80)
-        connection = socket.socket()
-        connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        connection.bind(address)
-        connection.listen(1)
-        
-        return connection
+        self.__connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.__connection.bind(address)
+        self.__connection.listen(1)
 
     def listen(self):
         print('Listening for requests...')
-        connection = self.__open_socket()
-        
+
+        self.__open_socket()
         self.__wdt_init()
         
         while True:
-            client = connection.accept()[0]
+            client = self.__connection.accept()[0]
             
             self.__router(client)
             client.close()
-            
+
     def __wdt_init(self):
         wdt = WDT(timeout=8000)
+        wdt.feed()
         
         wdt_timer = Timer(-1)
-        wdt_timer.init(mode=Timer.PERIODIC, freq=1000, callback=lambda t:wdt.feed())
-            
+        wdt_timer.init(mode=Timer.PERIODIC, freq=1000, \
+            callback=lambda t:self.__check_connection(wdt))
+
+    def __check_connection(self, wdt):
+        if 'state=1' not in str(self.__connection):
+            return
+
+        wdt.feed()
+
     def __router(self, client):
         request = client.recv(1024)
         lines = request.splitlines()
@@ -83,8 +90,8 @@ class HttpHandler:
             direction = re.search('/button/(\S+)', route).group(1).decode('utf-8')
             button = buttons[direction]
             button.value(1)
-            timer = Timer(-1)
-            timer.init(period=1000, mode=Timer.ONE_SHOT, callback=lambda t:button.value(0))
+            self.__btn_timer.init(period=1000, mode=Timer.ONE_SHOT, \
+                callback=lambda t:button.value(0))
             
             client.send('HTTP/1.0 200 OK\r\n')
         elif re.search(r'/static/\S+', route):
@@ -108,12 +115,11 @@ class HttpHandler:
             client.send('HTTP/1.0 200 OK\r\n')
             client.send('Content-Type: text/html; charset=UTF-8\r\n\r\n')
             self.__root(client)
-            
-        
+
     def __root(self, client):
         html_path = 'index' if WLAN().isconnected() else 'setup'
         self.__send_file(html_path + '.html', client)
-            
+
     def __send_file(self, filename, client):
         try:
             with open(filename, 'rb') as f:
