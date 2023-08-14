@@ -1,5 +1,5 @@
 {
-  "name": "open-gate",
+  "name": "sesame",
   "version": "1.0.0",
   "description": "Pico W remote control for opening gates",
   "main": "gulpfile.js",

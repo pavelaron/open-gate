@@ -58,7 +58,7 @@ class OpenGate:
         self.__set_hostname()
 
     def __set_hostname(self):
-        hostname('open-gate')
+        hostname('sesame')
         print('network hostname: ', hostname())
 
     def __restart(self):
