@@ -2,8 +2,9 @@ body, html {
   background-color: #ebecf0;
   font-family: sans-serif;
   font-size: 16px;
-  -webkit-text-size-adjust: none;
   touch-action: manipulation;
+  -webkit-text-size-adjust: none;
+          text-size-adjust: none;
 }
 
 div, p {
@@ -15,7 +16,10 @@ div, p {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+     -moz-transform: translate(-50%, -50%);
+       -o-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 
 .button {
