@@ -1,6 +1,7 @@
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
+const autoprefixer = require('gulp-autoprefixer');
 const { obj } = require('through2');
 const { ensureDir } = require('fs-extra');
 const { join } = require('path');
@@ -14,6 +15,7 @@ const {
 
 task('minify-css', () => (
   src('src/static/*.css')
+    .pipe(autoprefixer())
     .pipe(cleanCSS())
     .pipe(dest('dist/static'))
 ));
