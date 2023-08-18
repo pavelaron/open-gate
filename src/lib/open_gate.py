@@ -1,8 +1,8 @@
 import network
 import sys
-import os
 import errno
 import gc
+import uos as os
 import utime as time
 import ujson as json
 import ubinascii as binascii
@@ -41,7 +41,7 @@ class OpenGate:
         self.__set_hostname()
 
     def __init_ap(self):
-        ssid = 'OpenGate-' + binascii.hexlify(unique_id()).decode()
+        ssid = 'Sesame-' + binascii.hexlify(unique_id()).decode()
         
         ap = WLAN(AP_IF)
         ap.config(essid=ssid, password='123456789')

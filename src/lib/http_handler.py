@@ -1,7 +1,7 @@
 import network
-import re
-import os
 import errno
+import uos as os
+import ure as re
 import usocket as socket
 import ujson as json
 
