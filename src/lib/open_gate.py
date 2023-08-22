@@ -10,8 +10,9 @@ import ubinascii as binascii
 from machine import unique_id
 from http_handler import HttpHandler
 from network import WLAN, AP_IF, STA_IF, hostname
+from micropython import const
 
-cache_filename = 'cache.json'
+CACHE_FILENAME = const('cache.json')
 
 class OpenGate:
     def __init__(self):
@@ -35,7 +36,7 @@ class OpenGate:
             print('connected')
             status = wlan.ifconfig()
             print('ip = ' + status[0])
-            handler = HttpHandler(status[0], cache_filename)
+            handler = HttpHandler(status[0], CACHE_FILENAME)
             handler.listen()
             
         self.__set_hostname()
@@ -52,7 +53,7 @@ class OpenGate:
         print('Access point active')
         print(status)
         
-        handler = HttpHandler(status[0], cache_filename)
+        handler = HttpHandler(status[0], CACHE_FILENAME)
         handler.listen()
         
         self.__set_hostname()
@@ -68,10 +69,10 @@ class OpenGate:
         self.__start_server()
 
     def __start_server(self):
-        if cache_filename not in os.listdir():
+        if CACHE_FILENAME not in os.listdir():
             self.__init_ap()
         else:
-            with open(cache_filename, 'r') as cache:
+            with open(CACHE_FILENAME, 'r') as cache:
                 data = json.load(cache)
                 cache.close()
               
