@@ -8,7 +8,7 @@ import ujson as json
 from network import WLAN
 from machine import Pin, Timer, WDT
 
-TYPES_MAP = {
+types_map = {
     'css'  : 'text/css',
     'gif'  : 'image/gif',
     'html' : 'text/html',
@@ -19,7 +19,7 @@ TYPES_MAP = {
     'txt'  : 'text/plain',
 }
 
-BUTTONS = {
+buttons = {
     'pedestrian' : Pin(6, Pin.OUT),
     'car'        : Pin(7, Pin.OUT),
 }
@@ -88,7 +88,7 @@ class HttpHandler:
             client.send('HTTP/1.0 200 OK\r\n')
         elif re.search('/button/\S+', route):
             direction = re.search('/button/(\S+)', route).group(1).decode('utf-8')
-            button = BUTTONS[direction]
+            button = buttons[direction]
             button.value(1)
             self.__btn_timer.init(period=1000, mode=Timer.ONE_SHOT, \
                 callback=lambda t:button.value(0))
@@ -100,7 +100,7 @@ class HttpHandler:
             filename = path.group(0).decode('utf-8')
             
             ext = filename.split('.')[-1]
-            content_type = TYPES_MAP[ext] if ext in TYPES_MAP \
+            content_type = types_map[ext] if ext in types_map \
                            else 'application/octet-stream'
             
             client.send('Content-Type: ' + content_type + '\r\n')

@@ -1,11 +1,11 @@
 import machine
 
-from open_gate import OpenGate
+from sesame import Sesame
 from logger import Logger
 
 if __name__ == '__main__':
     try:
-        OpenGate()
+        Sesame()
     except KeyboardInterrupt:
         pass
     except Exception as error:

@@ -2,19 +2,17 @@ import network
 import sys
 import errno
 import gc
-import uos as os
+import machine
 import utime as time
 import ujson as json
 import ubinascii as binascii
 
-from machine import unique_id
 from http_handler import HttpHandler
 from network import WLAN, AP_IF, STA_IF, hostname
-from micropython import const
 
-CACHE_FILENAME = const('cache.json')
+cache_filename = 'cache.json'
 
-class OpenGate:
+class Sesame:
     def __init__(self):
         self.__start_server()
 
@@ -25,24 +23,27 @@ class OpenGate:
         wlan.connect(ssid, password)
         
         for i in range(10):
-            if wlan.status() < 0 or wlan.status() >= 3:
+            status = wlan.status()
+
+            if status < network.STAT_IDLE or status >= network.STAT_GOT_IP:
                 break
             print('waiting for connection...')
             time.sleep(1)
         
-        if wlan.status() != 3:
-            self.__init_ap()
+        if status != network.STAT_GOT_IP:
+            machine.reset()
         else:
             print('connected')
-            status = wlan.ifconfig()
-            print('ip = ' + status[0])
-            handler = HttpHandler(status[0], CACHE_FILENAME)
+            ifconfig = wlan.ifconfig()
+            print('ip = ' + ifconfig[0])
+            handler = HttpHandler(ifconfig[0], cache_filename)
             handler.listen()
             
         self.__set_hostname()
 
     def __init_ap(self):
-        ssid = 'Sesame-' + binascii.hexlify(unique_id()).decode()
+        uid = machine.unique_id()
+        ssid = 'Sesame-' + binascii.hexlify(uid).decode()
         
         ap = WLAN(AP_IF)
         ap.config(essid=ssid, password='123456789')
@@ -53,7 +54,7 @@ class OpenGate:
         print('Access point active')
         print(status)
         
-        handler = HttpHandler(status[0], CACHE_FILENAME)
+        handler = HttpHandler(status[0], cache_filename)
         handler.listen()
         
         self.__set_hostname()
@@ -69,10 +70,8 @@ class OpenGate:
         self.__start_server()
 
     def __start_server(self):
-        if CACHE_FILENAME not in os.listdir():
-            self.__init_ap()
-        else:
-            with open(CACHE_FILENAME, 'r') as cache:
+        try:
+            with open(cache_filename, 'r') as cache:
                 data = json.load(cache)
                 cache.close()
               
@@ -80,6 +79,11 @@ class OpenGate:
                 password = data['password']
                 
                 self.__connect_sta(ssid, password)
+        except OSError as exc:
+            if exc.errno != errno.ENOENT:
+                raise
+
+            self.__init_ap()
 
         gc.enable()
         gc.threshold(gc.mem_free() // 4 + gc.mem_alloc())
