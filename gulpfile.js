@@ -2,6 +2,7 @@ const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
 const autoprefixer = require('gulp-autoprefixer');
+const babel = require('gulp-babel');
 const { obj } = require('through2');
 const { ensureDir } = require('fs-extra');
 const { join } = require('path');
@@ -22,6 +23,7 @@ task('minify-css', () => (
 
 task('minify-js', () => (
   src('src/static/*.js')
+    .pipe(babel({ presets: ['@babel/env'] }))
     .pipe(uglify())
     .pipe(dest('dist/static'))
 ));
