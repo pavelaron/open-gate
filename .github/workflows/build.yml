@@ -14,11 +14,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Compile Micropython
-        run: ./build_rpi_pico_w.sh ${{ env.MICROPYTHON_VERSION }} ${{ env.NETWORK_HOSTNAME }}
+        run: ./build_rpi_pico_w.sh ${{ vars.MICROPYTHON_VERSION }} ${{ vars.NETWORK_HOSTNAME }}
       - name: Upload uf2 atrifact
         uses: actions/upload-artifact@v4
         with:
-          name: "micropython-${{ env.NETWORK_HOSTNAME }}"
+          name: "micropython-${{ vars.NETWORK_HOSTNAME }}"
           path: ${{ github.workspace }}/micropython/ports/rp2/build-RPI_PICO_W/**/*
       - name: PNPM install
         run: pnpm install --no-frozen-lockfile
