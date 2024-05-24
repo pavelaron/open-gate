@@ -5,7 +5,12 @@ MPCONFIG_PATH=./micropython/ports/rp2/boards/RPI_PICO_W/mpconfigboard.h
 
 git clone --depth 1 --branch $1 https://github.com/micropython/micropython.git
 
-sed -i '' 's/\(#define MICROPY_PY_NETWORK_HOSTNAME_DEFAULT.*\)".*"/\1"'$2'"/g' $MPCONFIG_PATH
+SEDOPTION="-i"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  SEDOPTION="-i ''"
+fi
+
+sed $SEDOPTION 's/(#define MICROPY_PY_NETWORK_HOSTNAME_DEFAULT.*)".*"/\1"'$2'"/g' $MPCONFIG_PATH
 
 make -C ./micropython/mpy-cross/ -j 16
 make -C ./micropython/ports/rp2 BOARD=RPI_PICO_W clean
