@@ -5,7 +5,7 @@ MPCONFIG_PATH=./micropython/ports/rp2/boards/RPI_PICO_W/mpconfigboard.h
 
 git clone --depth 1 --branch $1 https://github.com/micropython/micropython.git
 
-SEDOPTION="-i"
+SEDOPTION="-ri"
 if [[ "$OSTYPE" == "darwin"* ]]; then
   SEDOPTION="-i ''"
 fi
