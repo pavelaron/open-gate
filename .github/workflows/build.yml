@@ -18,7 +18,7 @@ jobs:
       - name: Upload uf2 atrifact
         uses: actions/upload-artifact@v4
         with:
-          name: "micropython-${{ vars.NETWORK_HOSTNAME.lowercase }}"
+          name: "micropython-${{ vars.BUILD_NAME }}"
           path: ${{ github.workspace }}/micropython/ports/rp2/build-RPI_PICO_W/**/*
       - name: PNPM install
         run: pnpm install --no-frozen-lockfile
