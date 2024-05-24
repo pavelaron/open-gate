@@ -39,8 +39,6 @@ class Sesame:
             print('ip = ' + ifconfig[0])
             handler = HttpHandler(ifconfig[0], cache_filename)
             handler.listen()
-            
-        self.__set_hostname()
 
     def __init_ap(self):
         uid = machine.unique_id()
@@ -60,16 +58,12 @@ class Sesame:
         
         self.__set_hostname()
 
-    def __set_hostname(self):
-        hostname('sesame')
-        print('network hostname: ', hostname())
-
     def __start_server(self):
         if cache_filename in os.listdir():
             with open(cache_filename, 'r') as cache:
                 data = json.load(cache)
                 cache.close()
-              
+                
                 ssid = data['ssid']
                 password = data['password']
                 
