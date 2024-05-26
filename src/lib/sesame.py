@@ -9,7 +9,7 @@ import ujson as json
 import ubinascii as binascii
 
 from http_handler import HttpHandler
-from network import WLAN, AP_IF, STA_IF, hostname
+from network import WLAN, AP_IF, STA_IF
 
 cache_filename = 'cache.json'
 
@@ -55,8 +55,6 @@ class Sesame:
         
         handler = HttpHandler(status[0], cache_filename)
         handler.listen()
-        
-        self.__set_hostname()
 
     def __start_server(self):
         if cache_filename in os.listdir():
