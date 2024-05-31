@@ -42,7 +42,7 @@ class Sesame:
 
     def __init_ap(self):
         uid = machine.unique_id()
-        ssid = 'Sesame-' + binascii.hexlify(uid).decode()
+        ssid = 'Sesame-' + binascii.hexlify(uid).decode()[-4:].upper()
         
         ap = WLAN(AP_IF)
         ap.config(essid=ssid, password='123456789')
